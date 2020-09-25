@@ -39,3 +39,28 @@ function select_product($type)
     $result= executeQuery($link, $sql);
     return $result;
 }
+function add_product($id)
+{
+         $sql="select price,name,product_details.id from product_details 
+            inner join products on products.id=product_details.product_id
+            where product_details.id=$id";
+$link= databaseCon();
+$result_product_detail= executeQuery($link, $sql);
+$row2= mysqli_fetch_assoc($result_product_detail);
+
+$name=$row2["name"];
+$price=$row2["price"];
+$time=time();
+$baskit = array(
+$time=>array(    
+ 'id'=>$id,   
+ 'name'=>$name,
+ 'price'=>$price,
+ 'time'=>$time       
+));
+return $baskit;
+}
+//function remove_product()
+//{
+//    
+//}
