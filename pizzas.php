@@ -8,23 +8,11 @@ $select_product=select_product("pizza");
 
 
 
-if(isset($_POST['size']) && $_POST['size']!="")
+if(isset($_POST['product_id']) && $_POST['product_id']!="")
 {
-$id="'".$_POST['size']."'";
-        $sql="select price,name from product_details 
-        inner join products on products.id=product_details.product_id
-        where product_details.id=$id";
-$link= databaseCon();
-$result_product_detail= executeQuery($link, $sql);
-$row2= mysqli_fetch_assoc($result_product_detail);
-$name=$row2["name"];
-$price=$row2["price"];
+$product_id="'".$_POST['product_id']."'";
 
-$baskit = array(
- $id=>array(
- 'name'=>$name,
- 'price'=>$price
-));
+$baskit=add_product($product_id);
 if(empty($_SESSION["baskit_cart"])) {
     $_SESSION["baskit_cart"] = $baskit;
     
@@ -40,7 +28,19 @@ if(empty($_SESSION["baskit_cart"])) {
 	}
     
 }
-
+if (isset($_POST['action']) && $_POST['action']=="remove"){
+if(!empty($_SESSION["baskit_cart"])) {
+    foreach($_SESSION["baskit_cart"] as $key=>$value) {
+        
+      if(in_array($_POST["time"],$value)){
+       unset($_SESSION["baskit_cart"][$key]);
+     
+      }
+//      if(empty($_SESSION["baskit_cart"]))
+//      unset($_SESSION["baskit_cart"]);
+      } 
+}
+}
 
 ?>
 
@@ -56,22 +56,31 @@ if(empty($_SESSION["baskit_cart"])) {
                                 <div _ngcontent-pre-c8="" class="card mb-0 bg-white border-0 d-block w-100 col-12 w-100 d-block px-0 px-auto ">
                                     <?php 
                                     $total=0;
+                                    
                                     if(isset($_SESSION["baskit_cart"])){
                                      foreach ($_SESSION["baskit_cart"] as $product){
                                          $total+=$product['price'];
                                          
                                       ?>
+                                    <form action="pizzas.php" method="post">
+                                        
                                     <div _ngcontent-pre-c8="" class="col-12 row py-auto pr-0 produduct-price-section">
                                      <div _ngcontent-pre-c8="" aria-expanded="true" class="col-7 card-header bg-white border-0 px-2 collapsed py-0" data-toggle="collapse" data-target="#collapseOne0">
                                          <span _ngcontent-pre-c8="" class="product-name pl-2"> <?=$product['name']=$product['name'] ?? ""?>  </span>
                                      </div>
-                                         <div _ngcontent-pre-c8="" class="col-4 px-0 text-right pr-2 product-price"> Rs.<?=$product['price']=$product['price'] ?? ""?> </div>
-                                         <div _ngcontent-pre-c8="" class="col-1 px-0 btn p-0 mt-n1" id=""
-                                              >
-                                             <span  class="closeBtn opacity-25" id=""> x </span>
+                                         <div _ngcontent-pre-c8="" class="col-4 px-0 text-right pr-2 product-price"> 
+                                             Rs.<?=$product['price']=$product['price'] ?? ""?> 
+                                         </div>
+                                        <input type="hidden" name="action" value="remove">
+                                        <input type="hidden" name="id" value="<?=$product['id']?>">
+                                        <input type="hidden" name="time" value="<?=$product['time']?>">
+                                        
+                                         <div _ngcontent-pre-c8="" class="col-1 px-0 btn p-0 mt-n1">
+                                             <button type="submit"  class="closeBtn opacity-25"> x </button>
                                              
                                          </div>
                                     </div>
+                                    </form>
                                     <?php }}?>
                                              <div  class="col-12 py-0 mt-n1">
                                                  <div  class="card-body collapse py-0 border-0" data-parent="#accordion" id="collapseOne0">
@@ -108,7 +117,9 @@ if(empty($_SESSION["baskit_cart"])) {
                              
                             <div _ngcontent-stv-c9="" class="col-12 col-sm-12 px-0 mx-0 px-md-3 px-md-0">
                                 <div _ngcontent-stv-c9="" class="row py-3 px-0 mb-0 mb-md-3 mt-n2"><!---->
-                                    <?php while($row= mysqli_fetch_assoc($select_product)){
+                                    <?php 
+                                    
+                                    while($row= mysqli_fetch_assoc($select_product)){
                                                     $id=$row['id']; 
                                                     ?>
                                     <div _ngcontent-stv-c9="" class="col-6 col-sm-4 col-md-4 col-lg-3 px-1 product-card-wrapper">
@@ -125,7 +136,7 @@ if(empty($_SESSION["baskit_cart"])) {
                                                     <div _ngcontent-stv-c9="" class="d-block pt-4 pt-md-2 pb-1 "> Select Size &amp; Type </div>
                                                    
                                                     
-                                                    <select class="browser-default custom-select size" name="size">
+                                                    <select class="browser-default custom-select size" name="product_id">
                                                          <?php
                                                      $sql="select * from product_details where product_id=$id" ;
                                                      $link= databaseCon();
