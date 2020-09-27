@@ -99,11 +99,15 @@ if(!empty($_SESSION["baskit_cart"])) {
                                                         
                                             </div>
                                         <div _ngcontent-pre-c8="" class="row h6 pb-1 text-light py-2"><!---->
-                                    
+                                                    <?php if(!empty($_SESSION["baskit_cart"])) { ?>
                                                     <div _ngcontent-pre-c8="" class="col-12 px-4 mt-4 "><!----><!---->
-                                                        <button _ngcontent-pre-c8="" class="btn btn-block btn-success px-0 py-2">
-                                                            <span _ngcontent-pre-c8="" class="text-center"> Checkout </span><!---->
-                                                            <span _ngcontent-pre-c8="" class="float-right pr-3"> Rs.<?=$total?> </span></button><!----></div></div>
+                                                        <button _ngcontent-pre-c8="" class="btn btn-block btn-success px-0 py-2"> 
+                                                            <a href="my_baskit.php?total=<?=$total?>" class="text-white"> Checkout Rs.<?=$total?></a><!---->
+                                                           
+                                                        </button><!---->
+                                                    </div>
+                                                    <?php }?>
+                                        </div>
                                     </div>
         </div></app-basket-right>
 </div>
