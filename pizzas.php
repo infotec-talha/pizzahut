@@ -60,7 +60,8 @@ if(!empty($_SESSION["baskit_cart"])) {
                                     if(isset($_SESSION["baskit_cart"])){
                                      foreach ($_SESSION["baskit_cart"] as $product){
                                          $total+=$product['price'];
-                                         
+                                        
+                                         echo $product['product_id'];
                                       ?>
                                     <form action="pizzas.php" method="post">
                                         
@@ -84,9 +85,11 @@ if(!empty($_SESSION["baskit_cart"])) {
                                     <?php }}?>
                                              <div  class="col-12 py-0 mt-n1">
                                                  <div  class="card-body collapse py-0 border-0" data-parent="#accordion" id="collapseOne0">
-                                                     <p  class="d-inline text-dark small product-name opacity50">Pan Small</p></div></div>
+                                                     <p  class="d-inline text-dark small product-name opacity50">Pan Small</p>
+                                                 </div>
+                                             </div>
                                 </div></div></div></div></li><!----></ul>
-            <div _ngcontent-pre-c8="" class="d-block mt-4">
+                                  <div _ngcontent-pre-c8="" class="d-block mt-4">
                                    </div>
                                     <div _ngcontent-pre-c8="" class="col-12 mb-n3 p-2 py-4 basket-bottom-area">
                                                 <div _ngcontent-pre-c8="" class="border mt-4 px-0 mx-0 px-auto shadow-sm w-100 border-left-0">
@@ -102,7 +105,7 @@ if(!empty($_SESSION["baskit_cart"])) {
                                                     <?php if(!empty($_SESSION["baskit_cart"])) { ?>
                                                     <div _ngcontent-pre-c8="" class="col-12 px-4 mt-4 "><!----><!---->
                                                         <button _ngcontent-pre-c8="" class="btn btn-block btn-success px-0 py-2"> 
-                                                            <a href="my_baskit.php?total=<?=$total?>" class="text-white"> Checkout Rs.<?=$total?></a><!---->
+                                                            <a href="my_baskit.php?total=<?=$total?>" class="text-white"> Checkout Rs.<?=$total?></a>
                                                            
                                                         </button><!---->
                                                     </div>
@@ -126,7 +129,7 @@ if(!empty($_SESSION["baskit_cart"])) {
                                     while($row= mysqli_fetch_assoc($select_product)){
                                                     $id=$row['id']; 
                                                     ?>
-                                    <div _ngcontent-stv-c9="" class="col-6 col-sm-4 col-md-4 col-lg-3 px-1 product-card-wrapper">
+                                    <div  class="col-6 col-sm-4 col-md-4 col-lg-3 px-1 product-card-wrapper">
                                         
                                         <div _ngcontent-stv-c9="" class="card mt-2 product-card">
                                             <form action="pizzas.php" method="post">
@@ -153,9 +156,11 @@ if(!empty($_SESSION["baskit_cart"])) {
                                                            $span_id = $row1['id'];
                                                           }
                                                     ?>
-                                                        <option data="<?=$span_id?>"  value="<?=$row1['id']?>"> <?=$row1['size']?> </option>
+                                                        <option data="<?=$span_id?>"  value="<?=$row1['id']?>">  <?=$row1['size']?> </option>
                                                       <?php  }?>
                                                     </select>
+                                                   
+                                                    
                                             </div>
                                              
                                           <div _ngcontent-stv-c9="" class="card-footer bg-white border-0 px-2">
