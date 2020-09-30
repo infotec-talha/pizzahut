@@ -41,26 +41,74 @@ function select_product($type)
 }
 function add_product($id)
 {
-         $sql="select price,name,product_details.id from product_details 
+         $sql="select price,name,product_details.id,product_details.product_id,size from product_details 
             inner join products on products.id=product_details.product_id
             where product_details.id=$id";
 $link= databaseCon();
 $result_product_detail= executeQuery($link, $sql);
 $row2= mysqli_fetch_assoc($result_product_detail);
-
+$product_id=$row2['product_id'];
 $name=$row2["name"];
 $price=$row2["price"];
+$size=$row2["size"];
 $time=time();
 $baskit = array(
 $time=>array(    
- 'id'=>$id,   
+ 'id'=>$id,
+ 'product_id'=>$product_id,  
  'name'=>$name,
  'price'=>$price,
+ 'size'=>$size,   
  'time'=>$time       
 ));
 return $baskit;
 }
-//function remove_product()
-//{
-//    
-//}
+function insert_into_customer($name,$email,$address)
+{
+   $link= databaseCon();
+   $sql="insert into customer(full_name,email,address) values($name,$email,$address)";
+   $result= executeQuery($link, $sql);
+   return $result;
+}
+function get_customer_id($email,$customer_name,$cus_address)
+{
+ $link= databaseCon();
+ $sql="select id from customer where email=$email";
+ $result=executeQuery($link, $sql);
+ $row= mysqli_num_rows($result);
+ // if customer already exists
+ if($row>0)
+ {
+     $row_id= mysqli_fetch_assoc ($result);
+     $customer_id=$row_id['id'];
+     return $customer_id;
+ }   
+ else
+ {
+    $is_success= insert_into_customer($customer_name,$email,$cus_address);
+     $customer_id = mysqli_insert_id($link);
+     // close connection before return
+     mysqli_close($link);
+     return $customer_id;
+
+ }
+ 
+   
+ 
+}
+function insert_order($customer_id,$delivery_note,$status)
+{
+    $order_id = 0;
+    $link= databaseCon();
+    $sql="insert into orders(customer_id,delivery_note,status) values($customer_id,$delivery_note,$status)";
+    $insert_obj=executeQuery($link, $sql);
+    if($insert_obj ===false){
+              
+          }
+          else{
+             $order_id =  mysqli_insert_id($link);
+          }
+          
+          mysqli_close($link);
+    return $order_id;
+}
