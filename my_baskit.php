@@ -1,15 +1,45 @@
 <?php
 session_start();
 include_once 'header.php';
-if(isset($_SESSION["baskit_cart"]) && !empty($_SESSION["baskit_cart"]) && isset($_GET["total"]))
+include_once 'functions.php';
+if(!empty($_SESSION["baskit_cart"]) && isset($_GET["total"]))
     {
     $total=$_GET["total"];
     }
-    elseif(isset($_POST["total"]))
+    elseif(isset($_POST["total"]) && $_POST["total"]!='')
     {
         $total=$_POST["total"];
-        echo $total;
+        $customer_name="'".$_POST['name']."'";
+        $email="'".$_POST['email']."'";
+        $cus_address="'".$_POST['address']."'";
+        $delivery_note="'".$_POST['note']."'";
+        $customer_id=get_customer_id($email,$customer_name,$cus_address);
+        $status="'"."yet to be deliver"."'";
+              
+          $order_id=insert_order($customer_id,$delivery_note,$status);
+          // if order is inserted
+          if($order_id>0){
+          foreach($_SESSION["baskit_cart"] as $product)
+          {
+              $pro_id=$product["product_id"];
+              $product_size="'".$product["size"]."'";
+              $sql="insert into order_details (quantity,order_id,product_id,size) values(1,$order_id,$pro_id,$product_size)";
+              $link= databaseCon();
+              $result=executeQuery($link, $sql);
+            
+          
+          
+         }
+         unset($_SESSION["baskit_cart"]);
+         
+       }
+       
+     
+           
+      
     }
+    
+   
 ?>
 <div _ngcontent-vgl-c16="" style="overflow-x: hidden; ">
   <div _ngcontent-vgl-c16="" class="container">
@@ -30,16 +60,9 @@ if(isset($_SESSION["baskit_cart"]) && !empty($_SESSION["baskit_cart"]) && isset(
         </div>
         <div _ngcontent-vgl-c16="" class="container">
           <div _ngcontent-vgl-c16="" class="row px-0 px-sm-0">
-           <div _ngcontent-vgl-c16="" class="col-12 col-md-6 mx-auto shadow-sm px-0 mb-3 mt-3 ">
-             <div _ngcontent-vgl-c16="" class=" card col-12 py-3 px-4 bg-white ">
-              <span _ngcontent-vgl-c16="">
-               <i _ngcontent-vgl-c16="" class="fa fa-map-marker text-dark"></i> Delivering to 12 ARMY AVIATION AIRPORT ROAD, Bahawalpur </span></div>
-              <div _ngcontent-vgl-c16="" class=" card col-12 py-3 px-4 bg-white ">
-                     <span _ngcontent-vgl-c16=""><i _ngcontent-vgl-c16="" aria-hidden="true" class="fa fa-clock-o text-dark"></i> Order for: ASAP </span>
-              </div>
-           </div>
+        
           </div>
-            <form action="my_baskit.php" method="post" autocomplete="off" class="was-invalidated is-invalid ng-untouched ng-pristine ng-invalid" novalidate="">
+           
             <div _ngcontent-vgl-c16="" class=" row ">
             <div _ngcontent-vgl-c16="" class="container">
             <div _ngcontent-vgl-c16="" class="row px-0 px-sm-0">
@@ -54,30 +77,28 @@ if(isset($_SESSION["baskit_cart"]) && !empty($_SESSION["baskit_cart"]) && isset(
               </div>
                   
              </div>
+                 <form class="was-invalidated is-invalid ng-untouched ng-pristine ng-invalid" action="my_baskit.php" method="post">
               <div _ngcontent-vgl-c16="" class="form-group">
                   <label _ngcontent-vgl-c16="" for="deliveryToName "> Name </label>
-               <input _ngcontent-vgl-c16="" class="form-control ng-untouched ng-pristine ng-invalid" formcontrolname="deliveryToName" id="deliveryToName" placeholder="First name is fine" type="text"><!---->
+                  <input required type="text" class="form-control ng-untouched ng-pristine ng-invalid" formcontrolname="deliveryToName"  name="name" placeholder="First name is fine" ><!---->
                   </div>
-                <div _ngcontent-vgl-c16="" class="form-group">
-                  <label _ngcontent-vgl-c16="" for="phoneNo"> Mobile</label>
-                    <input _ngcontent-vgl-c16="" class="form-control ng-untouched ng-pristine ng-invalid" formcontrolname="phoneNo" id="phoneNo" placeholder="So we can contact you (03xxxxxxxxx)" type="text"><!---->
-                 </div><div _ngcontent-vgl-c16="" class="form-group">
+               <div _ngcontent-vgl-c16="" class="form-group">
                <label _ngcontent-vgl-c16="" for="emailAddress" required="">Email Address</label>
-                <input _ngcontent-vgl-c16="" class="form-control ng-untouched ng-pristine ng-invalid" formcontrolname="emailAddress" id="emailAddress" placeholder="To send your confirmation" type="email"><!----></div>
+                <input required type="email" class="form-control ng-untouched ng-pristine ng-invalid" name="email" placeholder="To send your confirmation"><!----></div>
                    <div _ngcontent-vgl-c16="" class="form-section-head mb-4 mt-5">
                 <div _ngcontent-vgl-c16="" class="seperator-line mr-auto ml-auto">
                   <div _ngcontent-vgl-c16="" class="bg-white seperator-text px-3 bold"> Where should we deliver it? 
                       </div>
                      </div>
                   </div><div _ngcontent-vgl-c16="" class="form-group">
-                    <label _ngcontent-vgl-c16="" for="homeAddress"> Address Line 1 </label>
-                   <input _ngcontent-vgl-c16="" class="form-control ng-untouched ng-pristine ng-invalid" formcontrolname="homeAddress" id="homeAddress" placeholder="House number or name" required="" type="text"><!----></div>
+                    <label _ngcontent-vgl-c16="" for="homeAddress">Full Address </label>
+                   <input required type="text" class="form-control ng-untouched ng-pristine ng-invalid" name="address" placeholder="Address With House Number" ><!---->
+                  
+                  </div>
+                   
                     <div _ngcontent-vgl-c16="" class="form-group">
-                   <label _ngcontent-vgl-c16="" for="homeAddress2"> Address Line 2 </label>
-                     <input _ngcontent-vgl-c16="" class="form-control ng-untouched ng-pristine ng-valid" formcontrolname="homeAddress2" id="homeAddress2" placeholder="Address Line 2 (Optional)" type="text"><!----></div>
-                    <div _ngcontent-vgl-c16="" class="form-group">
-                    <label _ngcontent-vgl-c16="" for="deliveryInstruction"> Delivery Instructions (optional) </label>
-                     <input _ngcontent-vgl-c16="" class="form-control ng-untouched ng-pristine ng-valid" formcontrolname="deliveryInstructions" id="deliveryInstruction" placeholder="Any instructions for your driver" type="text"><!----></div>
+                    <label _ngcontent-vgl-c16="" for="deliveryInstruction"> Delivery Note's </label>
+                     <input _ngcontent-vgl-c16="" class="form-control ng-untouched ng-pristine ng-valid" name="note" placeholder="Any instructions for your driver" type="text"><!----></div>
             </div>
              </div>
             </div>
@@ -106,8 +127,9 @@ if(isset($_SESSION["baskit_cart"]) && !empty($_SESSION["baskit_cart"]) && isset(
                  <img _ngcontent-vgl-c16="" height="100%" src="money-bill.png" width="100%"></span> Cash </label>
                <span _ngcontent-vgl-c16="" class=" text-right col-7 px-0 pr-2"> Cash on delivery </span></div>
                 </div></div></div><!----><!----></div></div><div _ngcontent-vgl-c16="" class="col-12 col-md-6 mx-auto shadow-sm px-0 mb-3 mt-5 ">
-               <div _ngcontent-vgl-c16="" class=" card col-12 py-3 px-4 bg-white"><!----><!---->
-               <button _ngcontent-vgl-c16="" class="btn btn-success btn-block float-center mr-auto ml-auto btn-lg" id="submitBtn" type="submit" name="total" value="<?=$total?>"> Place your order (Rs.<?=$total?>) </button>
+               <div _ngcontent-vgl-c16="" class=" card col-12 py-3 px-4 bg-white">
+                   <input type="hidden" name="total" value="<?=$total=$total ?? ''?>">
+               <button _ngcontent-vgl-c16="" class="btn btn-success btn-block float-center mr-auto ml-auto btn-lg" id="submitBtn" type="submit"  > Place your order (Rs.<?=$total?>) </button>
                  </div>
                  </div>
                  </div>
