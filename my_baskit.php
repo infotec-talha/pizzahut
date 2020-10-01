@@ -2,12 +2,14 @@
 session_start();
 include_once 'header.php';
 include_once 'functions.php';
+
 if(!empty($_SESSION["baskit_cart"]) && isset($_GET["total"]))
     {
     $total=$_GET["total"];
     }
     elseif(isset($_POST["total"]) && $_POST["total"]!='')
     {
+        
         $total=$_POST["total"];
         $customer_name="'".$_POST['name']."'";
         $email="'".$_POST['email']."'";
@@ -23,22 +25,24 @@ if(!empty($_SESSION["baskit_cart"]) && isset($_GET["total"]))
           {
               $pro_id=$product["product_id"];
               $product_size="'".$product["size"]."'";
+              $time=$product["time"];
               $sql="insert into order_details (quantity,order_id,product_id,size) values(1,$order_id,$pro_id,$product_size)";
               $link= databaseCon();
               $result=executeQuery($link, $sql);
-            
+            unset($_SESSION["baskit_cart"][$time]);
+          
           
           
          }
-         unset($_SESSION["baskit_cart"]);
-         
+         $transaction= transaction($order_id,$total);
+         header("location:index.php");
        }
        
      
            
       
     }
-    
+    else
    
 ?>
 <div _ngcontent-vgl-c16="" style="overflow-x: hidden; ">
@@ -59,6 +63,7 @@ if(!empty($_SESSION["baskit_cart"]) && isset($_GET["total"]))
             
         </div>
         <div _ngcontent-vgl-c16="" class="container">
+            <form class="was-invalidated is-invalid ng-untouched ng-pristine ng-invalid" action="my_baskit.php" method="post">
           <div _ngcontent-vgl-c16="" class="row px-0 px-sm-0">
         
           </div>
@@ -77,7 +82,7 @@ if(!empty($_SESSION["baskit_cart"]) && isset($_GET["total"]))
               </div>
                   
              </div>
-                 <form class="was-invalidated is-invalid ng-untouched ng-pristine ng-invalid" action="my_baskit.php" method="post">
+                 
               <div _ngcontent-vgl-c16="" class="form-group">
                   <label _ngcontent-vgl-c16="" for="deliveryToName "> Name </label>
                   <input required type="text" class="form-control ng-untouched ng-pristine ng-invalid" formcontrolname="deliveryToName"  name="name" placeholder="First name is fine" ><!---->
@@ -111,25 +116,30 @@ if(!empty($_SESSION["baskit_cart"]) && isset($_GET["total"]))
            <div _ngcontent-vgl-c16="" class="col-12 col-md-12 mx-auto shadow-sm px-0 mb-3 mt-2  ">
             <div _ngcontent-vgl-c16="" class=" card col-12 pt-3 pb-2 mb-2 ">
              <div _ngcontent-vgl-c16="" class="form-group col-12 align-middle row  ">
-              <div _ngcontent-vgl-c16="" class="col-12 form-check-inline px-0 ">
-              <input _ngcontent-vgl-c16=""  id="paymentMode" type="radio" value="pwd">
-              <span _ngcontent-vgl-c16="" checked="checked" class="checkmark "></span>
-              <label _ngcontent-vgl-c16="" class="pl-5   form-check-label col-6 px-0 " for="paymentMode"> Pay with card </label>
+              <div  class="form-check">
+                      
+              <input type="radio" class="form-check-input" id="radio1" name="optradio" value="pwd">
+              <label _ngcontent-vgl-c16="" class="pl-5   form-check-label col-6 px-0 " for="radio1"> Pay with card </label>
                   <span _ngcontent-vgl-c16="" class="text-right float-right col-6 px-0 pr-2">
-                   <img _ngcontent-vgl-c16="" height="70%" src="visa.png" width="70%"></span>
-                 </div></div></div><div _ngcontent-vgl-c16="" class=" card col-12 pt-3 pb-2 ">
+                   <img _ngcontent-vgl-c16="" height="70%" src="visa.png" width="70%">
+                  </span>
+                 </div>
+             </div>
+            </div>
+               <div _ngcontent-vgl-c16="" class=" card col-12 pt-3 pb-2 ">
                  <div _ngcontent-vgl-c16="" class="form-group col-12 align-middle row ">
-                <div _ngcontent-vgl-c16="" class="col-12 form-check-inline px-0">
-               <input _ngcontent-vgl-c16="" class="form-check-input pl-2 col-2 hide ng-untouched ng-pristine ng-valid" formcontrolname="paymentMode" id="paymentMode2" type="radio" value="cod">
-                 <span _ngcontent-vgl-c16="" class="checkmark   "></span>
-                 <label _ngcontent-vgl-c16="" class=" pl-5 form-check-label col-5 px-0 " for="paymentMode2">
+                <div  class="form-check">
+                
+                <input type="radio" class="form-check-input" id="radio2" name="optradio" value="cod">
+                 <label _ngcontent-vgl-c16="" class=" pl-5 form-check-label col-5 px-0 " for="radio2">
                  <span _ngcontent-vgl-c16="" class="text-right float-left col-3 px-0 pr-3 cash d-none d-md-block  ">
                  <img _ngcontent-vgl-c16="" height="100%" src="money-bill.png" width="100%"></span> Cash </label>
-               <span _ngcontent-vgl-c16="" class=" text-right col-7 px-0 pr-2"> Cash on delivery </span></div>
+               <span _ngcontent-vgl-c16="" class=" text-right col-7 px-0 pr-2"> Cash on delivery </span>
+                </div>
                 </div></div></div><!----><!----></div></div><div _ngcontent-vgl-c16="" class="col-12 col-md-6 mx-auto shadow-sm px-0 mb-3 mt-5 ">
                <div _ngcontent-vgl-c16="" class=" card col-12 py-3 px-4 bg-white">
                    <input type="hidden" name="total" value="<?=$total=$total ?? ''?>">
-               <button _ngcontent-vgl-c16="" class="btn btn-success btn-block float-center mr-auto ml-auto btn-lg" id="submitBtn" type="submit"  > Place your order (Rs.<?=$total?>) </button>
+                <button _ngcontent-vgl-c16="" class="btn btn-success btn-block float-center mr-auto ml-auto btn-lg" id="submitBtn" type="submit" name="total" value="<?=$total=$total ?? ''?>"> Place your order (Rs.<?=$total?>) </button>
                  </div>
                  </div>
                  </div>
