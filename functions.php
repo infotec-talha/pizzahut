@@ -112,3 +112,10 @@ function insert_order($customer_id,$delivery_note,$status)
           mysqli_close($link);
     return $order_id;
 }
+function transaction($order_id,$total)
+{
+    $link= databaseCon();
+    $sql="insert into transactions(order_id,cash_in) values($order_id,$total)";
+    $transaction=executeQuery($link, $sql);
+    return $transaction;
+}
