@@ -40,6 +40,25 @@
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/jquery-3.5.1.js"></script>
     <script type="text/javascript" src="js/popper.min.js"></script>
+    <script type="text/javascript" src="css/bootstrap.min.css"></script>
+    <script>
+    $(document).ready(function(){
+      $('.size').on('change',function(){
+         id = $(this).val();
+         var dataAttrVal = $('option:selected', this).attr('data');
+          $.ajax({
+              url: "requests/get_price.php", 
+              method:"post",
+              data :{'id':id},
+              success: function(result)
+              {
+            $('#'+dataAttrVal).html(result);
+               }
+        });
+      }); 
+    });
+    
+    </script>
 
 </body>
 </html>
