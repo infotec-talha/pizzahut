@@ -34,8 +34,10 @@ if(!empty($_SESSION["baskit_cart"]) && isset($_GET["total"]))
           
           
          }
-         $transaction= transaction($order_id,$total);
-         header("location:index.php");
+         $order_total=array('order_id'=>$order_id,'total'=>$total);
+         $_SESSION["order_total"]=$order_total;
+         header("location:amount_transaction.php");
+         
        }
        
      
@@ -63,12 +65,13 @@ if(!empty($_SESSION["baskit_cart"]) && isset($_GET["total"]))
             
         </div>
         <div _ngcontent-vgl-c16="" class="container">
-            <form class="was-invalidated is-invalid ng-untouched ng-pristine ng-invalid" action="my_baskit.php" method="post">
+           
           <div _ngcontent-vgl-c16="" class="row px-0 px-sm-0">
         
           </div>
-           
+            <form class="was-invalidated is-invalid ng-untouched ng-pristine ng-invalid" action="my_baskit.php" method="post">
             <div _ngcontent-vgl-c16="" class=" row ">
+                
             <div _ngcontent-vgl-c16="" class="container">
             <div _ngcontent-vgl-c16="" class="row px-0 px-sm-0">
             <div _ngcontent-vgl-c16="" class="col-12 col-md-6 mx-auto shadow-sm px-0 b-3 mt-1">
@@ -118,7 +121,7 @@ if(!empty($_SESSION["baskit_cart"]) && isset($_GET["total"]))
              <div _ngcontent-vgl-c16="" class="form-group col-12 align-middle row  ">
               <div  class="form-check">
                       
-              <input type="radio" class="form-check-input" id="radio1" name="optradio" value="pwd">
+              <input type="radio" class="form-check-input" id="radio1" name="payment_type" value="bank">
               <label _ngcontent-vgl-c16="" class="pl-5   form-check-label col-6 px-0 " for="radio1"> Pay with card </label>
                   <span _ngcontent-vgl-c16="" class="text-right float-right col-6 px-0 pr-2">
                    <img _ngcontent-vgl-c16="" height="70%" src="visa.png" width="70%">
@@ -130,7 +133,7 @@ if(!empty($_SESSION["baskit_cart"]) && isset($_GET["total"]))
                  <div _ngcontent-vgl-c16="" class="form-group col-12 align-middle row ">
                 <div  class="form-check">
                 
-                <input type="radio" class="form-check-input" id="radio2" name="optradio" value="cod">
+                <input type="radio" class="form-check-input" id="radio2" name="payment_type" value="cod">
                  <label _ngcontent-vgl-c16="" class=" pl-5 form-check-label col-5 px-0 " for="radio2">
                  <span _ngcontent-vgl-c16="" class="text-right float-left col-3 px-0 pr-3 cash d-none d-md-block  ">
                  <img _ngcontent-vgl-c16="" height="100%" src="money-bill.png" width="100%"></span> Cash </label>
@@ -153,5 +156,6 @@ if(!empty($_SESSION["baskit_cart"]) && isset($_GET["total"]))
                      </div>
                     </div>
                 </div>
+
 </div>
 <?php include_once 'footer.php'; 
