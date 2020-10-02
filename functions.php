@@ -119,3 +119,38 @@ function transaction($order_id,$total)
     $transaction=executeQuery($link, $sql);
     return $transaction;
 }
+function withdrawal($description,$balance,$transaction,$account_number)
+{
+    if($balance<$transaction)
+    {
+        $html="your balance amount is less then withdrawal";
+        return $html;  
+    }
+    else
+    {
+        $total=$balance-$transaction;
+        $sql="insert into transactions(description,withdrawals,balance,account_number) values($description,$transaction,$total,$account_number)";
+        $link= bank_database_con();
+        $transaction_insert= executeQuery($link, $sql);
+    }
+}
+function bank_database_con()
+{
+$database='talhaBank';
+$host='localhost';
+$user='root';
+$pass='';
+$link= mysqli_connect($host, $user, $pass, $database);
+if($link===false)
+  die(mysqli_connect_error ());
+return $link;
+}
+function get_current_balance($account_number)
+{
+         $link= bank_database_con();
+         $sql="SELECT sum(deposits) - sum(withdrawals) as current_bal FROM transactions WHERE transactions.account_number=$account_number";
+         $result= executeQuery($link, $sql);
+         $current_balance= mysqli_fetch_assoc($result);
+         $balance=$current_balance["current_bal"];
+         return $balance;
+}
