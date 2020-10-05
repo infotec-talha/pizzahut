@@ -138,12 +138,12 @@ include_once 'functions.php';
                             </div>
             </div>
 			</form>
-		  <form class="formValidate" id="formValidate1" method="post" action="routers/add-item.php" novalidate="novalidate">
+          <form class="formValidate" id="formValidate1" method="post" action="admin_product_upload.php" novalidate="novalidate">
             <div class="row">
               <div class="col s12 m4 l3">
                 <h4 class="header">Add Item</h4>
               </div>
-              <div>
+<!--              <div>
 <table>
                     <thead>
                       <tr>
@@ -154,17 +154,17 @@ include_once 'functions.php';
 
                     <tbody>
 				<?php
-					echo '<tr><td><div class="input-field col s12"><label for="name">Name</label>';
-					echo '<input id="name" name="name" type="text" data-error=".errorTxt01"><div class="errorTxt01"></div></td>';					
-					echo '<td><div class="input-field col s12 "><label for="price" class="">Price</label>';
-					echo '<input id="price" name="price" type="text" data-error=".errorTxt02"><div class="errorTxt02"></div></td>';                   
-					echo '<td></tr>';
+//					echo '<tr><td><div class="input-field col s12"><label for="name">Name</label>';
+//					echo '<input id="name" name="name" type="text" data-error=".errorTxt01"><div class="errorTxt01"></div></td>';					
+//					echo '<td><div class="input-field col s12 "><label for="price" class="">Price</label>';
+//					echo '<input id="price" name="price" type="text" data-error=".errorTxt02"><div class="errorTxt02"></div></td>';                   
+//					echo '<td></tr>';
 				?>
                     </tbody>
 </table>
-              </div>
+              </div>-->
 			  <div class="input-field col s12">
-                              <button class="btn cyan waves-effect waves-light right" type="submit" name="action">Add
+                              <button class="btn cyan waves-effect waves-light right" type="submit"><a href="admin_product_upload.php" class="text-white">Add</a>
                                 <i class="mdi-content-send right"></i>
                               </button>
                             </div>
