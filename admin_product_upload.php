@@ -1,4 +1,5 @@
 <?php
+include_once 'header.php';
 include_once 'functions.php';   
  if($_SERVER["REQUEST_METHOD"]=="POST"){
     
@@ -22,10 +23,7 @@ if(isset($_POST["submit"])) {
 }
 }
 ?>
-<html>
-    <link href="css/imageStyles.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-<body>
+
 
     <form name="frmImage" action="admin_product_upload.php" method="post" enctype="multipart/form-data"  class="frmImageUpload">
    
@@ -59,6 +57,4 @@ if(isset($_POST["submit"])) {
     </div>
 </form>
 <?php if(isset($html)) echo $html;?>
-</body>
-</html>
-<!--enctype="multipart/form-data"-->
+<?php include_once 'footer.php';
