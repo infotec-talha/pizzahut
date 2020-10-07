@@ -154,3 +154,11 @@ function get_current_balance($account_number)
          $balance=$current_balance["current_bal"];
          return $balance;
 }
+function logIn($user_name,$password)
+{
+          $link= databaseCon();
+          $sql="SELECT * FROM users WHERE user_name='$user_name' AND password=$password";
+          $result= executeQuery($link, $sql);
+          return $result;
+ 
+} 
