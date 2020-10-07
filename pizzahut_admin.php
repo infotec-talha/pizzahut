@@ -1,7 +1,14 @@
 <?php
 include_once 'header.php';
 include_once 'functions.php';
+session_start();
+if(isset($_SESSION['login_user'])){
+$user_name=$_SESSION['login_user']["user_name"];
 
+}
+ else {
+    header("location:login.php");
+}
 ?>
 <div id="main">
     <!-- START WRAPPER -->
@@ -16,13 +23,13 @@ include_once 'functions.php';
                     <img src="images/avatar.jpg" alt="" class="circle responsive-img valign profile-image">
                 </div>
 				 <div class="col col s8 m8 l8">
-                    <ul id="profile-dropdown" class="dropdown-content">
-                        <li><a href="routers/logout.php"><i class="mdi-hardware-keyboard-tab"></i> Logout</a>
-                        </li>
-                    </ul>
+                   <form class="form-inline my-2 my-md-0" action="logout.php" method="post">
+                   <input type="hidden" name="action" value="logout">
+      <button type="submit" class="btn btn-primary btn-sm" >logout</button>
+               </form>
                 </div>
                 <div class="col col s8 m8 l8">
-                    <a class="btn-flat dropdown-button waves-effect waves-light white-text profile-btn" href="#" data-activates="profile-dropdown"><?php echo $name;?> <i class="mdi-navigation-arrow-drop-down right"></i></a>
+                    <a class="btn-flat dropdown-button waves-effect waves-light white-text profile-btn" href="#" data-activates="profile-dropdown"><?php echo $user_name;?> <i class="mdi-navigation-arrow-drop-down right"></i></a>
                     <p class="user-roal"></p>
                 </div>
             </div>
@@ -97,7 +104,7 @@ include_once 'functions.php';
         <div class="container">
           <p class="caption">Add, Edit or Remove Menu Items.</p>
           <div class="divider"></div>
-		  <form class="formValidate" id="formValidate" method="post" action="routers/menu-router.php" novalidate="novalidate">
+		  <form class="formValidate" id="formValidate" method="post" action="menu-router.php" novalidate="novalidate">
             <div class="row">
               <div class="col s12 m4 l3">
 <!--                <h4 class="header">Order Food</h4>-->
@@ -107,8 +114,9 @@ include_once 'functions.php';
                     <thead>
                       <tr>
                         <th>Name</th>
+                        <th><?=" "." "?></th>
+                        <th><?=" "." "?></th>
                         <th>Item Price/Piece</th>
-                        <th>Available</th>
                       </tr>
                     </thead>
 
@@ -119,11 +127,11 @@ include_once 'functions.php';
 				while($row = mysqli_fetch_array($result))
 				{      $product_id=$row["id"];
 					echo '<tr>';
-					echo '<td><input value="'.$row["name"].'" id="'.$row["id"].'_name" name="'.$row['id'].'_name" type="text" data-error=".errorTxt'.$row["id"].'"><div class="errorTxt'.$row["id"].'"></div></td>';
+					echo '<td><input  value="'.$row["name"].'"  name="'.$row['id'].'"><div class="errorTxt'.$row["id"].'"></div></td>';
                                         $product_detail=mysqli_query($link, "SELECT * FROM product_details where product_id=$product_id");
                                         while($row1= mysqli_fetch_assoc($product_detail)){
-					echo '<td><div class="input-field col s12 "><label for="'.$row1["id"].'_price">'.$row1['size'].'</label>';
-					echo '<input value="'.$row1["price"].'" id="'.$row1["id"].'_price" name="'.$row1['id'].'_price" type="text" data-error=".errorTxt'.$row1["id"].'"><div class="errorTxt'.$row1["id"].'"></div></td>';
+					echo '<td><div class="input-field col s12 "><input value="'.$row1['size'].'" id="'.$row1['id'].'">';
+					echo'<input value="'.$row1["price"].'" id="'.$row1["id"].'_price" name="'.$row1['id'].'_price" type="text" data-error=".errorTxt'.$row1["id"].'"><div class="errorTxt'.$row1["id"].'"></div></td>';
                                         }
 					echo'</tr>';
 				}
