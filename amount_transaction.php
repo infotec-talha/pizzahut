@@ -20,9 +20,22 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["account_number"]))
           $html='<small class="text-danger">your balance account is less then withdrawal!</small>';
         }
         else{
+            $pizzahut_bank_acc_dep=deposit("cash from pizzahut",$transaction,123000005);
+            if($pizzahut_bank_acc_dep)
+            { 
+                
+                    $to = "infotectalha@gmail.com";
+                    $subject = "My subject";
+                    $txt = "confermation sent to your email!";
+                    $headers = "From:naureenimran456@gmail.com";
+                   if(mail($to,$subject,$txt,$headers))
+               {
+                 $success="<small class='text-success'>confermation email sent from us!</small>";
+               }
             $transaction= transaction($order_id,$transaction);
             unset($_SESSION["order_total"]);
             $html='<small class="text-success">you ordered  successfully!</small>';
+            }
         }
         }
         }
@@ -64,7 +77,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["account_number"]))
          <div class="form-group col-4"></div>
          <div class="form-group col-4"></div>
          <div class="form-group col-1">
-            
+            <?php if(isset($success)) echo $success;?>
              
          </div>
          <div class="form-group col-1">
