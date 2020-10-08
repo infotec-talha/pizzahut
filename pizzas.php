@@ -61,7 +61,7 @@ if(!empty($_SESSION["baskit_cart"])) {
                                      foreach ($_SESSION["baskit_cart"] as $product){
                                          $total+=$product['price'];
                                         
-                                         echo $product['product_id'];
+                                        
                                       ?>
                                     <form action="pizzas.php" method="post">
                                         
