@@ -162,3 +162,17 @@ function logIn($user_name,$password)
           return $result;
  
 } 
+function deposit($description,$transaction,$account_number)
+{   
+    $sql="SELECT sum(deposits) - sum(withdrawals) as current_bal FROM transactions WHERE account_number=$account_number";
+    $link= bank_database_con();
+    $result=executeQuery($link, $sql);
+    $check_balance=mysqli_fetch_assoc($result);
+    $balance=$check_balance["current_bal"];
+    $total=$balance+$transaction;
+    $sql="insert into transactions(description,deposits,balance,account_number) values('$description',$transaction,$total,$account_number)";
+        $link= bank_database_con();
+        $transaction_insert= executeQuery($link, $sql);
+        return $transaction_insert;
+    
+}
