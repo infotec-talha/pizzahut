@@ -8,7 +8,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
  if(isset($date_from) && isset($date_to))
      {
      $link= databaseCon();
-     $sql="select * from transactions where date between $date_from and $date_to";
+     $sql="select * from transactions where date between date('$date_from') and date('$date_to')";
      $transaction_result= executeQuery($link,$sql);
      }
 }
@@ -29,7 +29,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
          <div class="form-group col-4"></div>
          <div class="form-group col-4">
              <label for="name">To:</label>
-             <input required type="date" class="form-control" name="balance"   name="end_date">
+             <input required type="date" class="form-control"  name="end_date">
          </div>
      <div class="form-group col-4"></div>
          <div class="form-group col-4"></div>
@@ -38,8 +38,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
          </div>
 </div>
 </form>
-<?php if(isset($transaction_result))
-    {while($row= mysqli_fetch_assoc($transaction_result)){?>
+
 <table id="example" class="table" style="width: 100%;">
     
         
@@ -60,7 +59,8 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
   </thead>
   <tbody>
       
-    
+    <?php if(isset($transaction_result))
+    {while($row= mysqli_fetch_assoc($transaction_result)){?>
     <tr role="row" class="odd">
       <td><?=$row["id"]?></td>
       <td><?=$row["order_id"]?></td>
