@@ -176,3 +176,10 @@ function deposit($description,$transaction,$account_number)
         return $transaction_insert;
     
 }
+function product_details($price,$size,$product_id)
+{
+  $sql="insert into product_details(price,size,product_id) values($price,$size,$product_id)";
+  $link= databaseCon();
+  $insert_product_detail= executeQuery($link, $sql);
+  return $insert_product_detail;  
+}
